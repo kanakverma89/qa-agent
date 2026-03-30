@@ -2,3 +2,6 @@ playwright
 anthropic
 pandas
 openpyxl
+requests
+beautifulsoup4
+python-dotenv
