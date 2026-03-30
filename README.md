@@ -1,51 +1,86 @@
-# QA Agent
+# 🤖 AI-Powered QA Agent (Python + Playwright + Claude)
 
-An AI-powered QA agent that scrapes a website, analyzes its UI structure, and automatically generates test cases using Claude — exported to Excel.
+An intelligent QA agent that **automatically explores a website, understands its structure, and generates high-quality test cases using AI**.
 
 ![CI](https://github.com/kanakverma89/qa-agent/actions/workflows/ci.yml/badge.svg)
 
-## How It Works
+---
+
+## 🚀 Why This Project?
+
+Traditional QA requires:
+
+* Manual test case writing
+* Repetitive effort
+* Limited coverage
+
+👉 This agent automates that by combining:
+
+* Web scraping
+* AI reasoning
+* Structured test generation
+
+---
+
+## 🧠 How It Works
 
 ```
 Target URL
     │
     ▼
-crawler/scraper.py       ← HTTP GET + BeautifulSoup → extracts inputs, buttons, links, APIs
+crawler/scraper.py       
+    └── Extracts inputs, buttons, links, APIs (Playwright / Requests + BeautifulSoup)
     │
     ▼
-ai/claude_generator.py   ← sends structured data to Claude → returns JSON test cases
+ai/claude_generator.py   
+    └── Sends structured page data → Claude API → returns JSON test cases
     │
     ▼
-utils/exporter.py        ← writes test cases to output/test_cases.xlsx
+utils/exporter.py        
+    └── Converts JSON → Excel (.xlsx)
 ```
 
-## Project Structure
+---
+
+## ✨ Key Features
+
+* 🔍 Intelligent website crawling
+* 🧠 AI-generated test cases (UI + API)
+* 📊 Structured Excel output
+* 🛡️ Security & edge case coverage
+* ⚙️ Modular, extensible architecture
+* 🔁 CI-enabled with GitHub Actions
+
+---
+
+## 🧱 Project Structure
 
 ```
 qa-agent/
-├── main.py                  # Entry point — orchestrates the full pipeline
-├── config.py                # Loads env vars (URL, model, output path, API key)
+├── main.py
+├── config.py
 ├── crawler/
-│   └── scraper.py           # Scrapes URL, returns inputs/buttons/links/APIs
+│   └── scraper.py
 ├── ai/
-│   └── claude_generator.py  # Sends page data to Claude, parses JSON response
+│   └── claude_generator.py
 ├── utils/
-│   └── exporter.py          # Converts test case JSON to .xlsx via pandas
+│   └── exporter.py
 ├── output/
-│   └── test_cases.xlsx      # Generated output (git-ignored)
-├── .github/
-│   └── workflows/
-│       └── ci.yml           # GitHub Actions — lint + import checks
+├── .github/workflows/ci.yml
 ├── requirements.txt
-└── .env                     # Local secrets (not committed)
+└── .env
 ```
 
-## Setup
+---
+
+## ⚙️ Setup
 
 ### Prerequisites
 
-- Python 3.10+
-- An [Anthropic API key](https://console.anthropic.com/)
+* Python 3.10+
+* Anthropic API Key
+
+---
 
 ### Install
 
@@ -54,70 +89,124 @@ pip install -r requirements.txt
 playwright install chromium
 ```
 
+---
+
 ### Configure
 
-Create a `.env` file in the project root:
+Create a `.env` file:
 
 ```env
-CLAUDE_API_KEY=sk-ant-...
+CLAUDE_API_KEY=your_api_key
 TARGET_URL=https://automationexercise.com/
 OUTPUT_FILE=output/test_cases.xlsx
-MODEL=claude-3-sonnet-20240229
+MODEL=claude-3-haiku-20240307
 ```
 
-| Variable        | Default                            | Description                        |
-|-----------------|------------------------------------|------------------------------------|
-| `CLAUDE_API_KEY`| —                                  | Anthropic API key (required)       |
-| `TARGET_URL`    | `https://automationexercise.com/`  | Website to scrape                  |
-| `OUTPUT_FILE`   | `output/test_cases.xlsx`           | Path for the generated Excel file  |
-| `MODEL`         | `claude-3-sonnet-20240229`         | Claude model to use                |
+---
 
 ### Run
 
 ```bash
-python main.py
+python -m main
 ```
 
-Output is written to `output/test_cases.xlsx`.
+---
 
-## Generated Test Case Format
+## 📊 Output
 
-Each row in the Excel file contains:
+The agent generates **structured test cases** in Excel:
 
-| Column     | Description                                    |
-|------------|------------------------------------------------|
-| Title      | Short description of the test case             |
-| Type       | `positive`, `negative`, `edge`, or `security`  |
-| Steps      | Pipe-separated list of test steps              |
-| Expected   | Expected result                                |
-| Priority   | `high`, `medium`, or `low`                     |
+| Title | Type | Steps | Expected | Priority |
+| ----- | ---- | ----- | -------- | -------- |
 
-Claude is prompted to cover:
-- UI interaction scenarios
-- API endpoint checks
-- Edge cases (empty input, max length, invalid format)
-- Security cases (SQL injection, XSS)
+---
 
-## CI
+## 🧪 Test Coverage
 
-GitHub Actions runs on every push and pull request to `main`:
+The AI generates:
 
-- Installs Python 3.13 and dependencies
-- Installs Playwright (Chromium)
-- Lints with `flake8` (hard-fail on syntax/undefined name errors)
-- Verifies all modules import successfully
+### ✅ Functional
 
-To enable CI, add `ANTHROPIC_API_KEY` as a repository secret:
-**Settings → Secrets and variables → Actions → New repository secret**
+* Valid user flows
+* Navigation scenarios
 
-## Dependencies
+### ❌ Negative
 
-| Package      | Purpose                              |
-|--------------|--------------------------------------|
-| `playwright` | Headless browser (available for JS-heavy sites) |
-| `anthropic`  | Claude API client                    |
-| `requests`   | HTTP scraping                        |
-| `beautifulsoup4` | HTML parsing                     |
-| `pandas`     | DataFrame → Excel export             |
-| `openpyxl`   | Excel file writer (pandas backend)   |
-| `python-dotenv` | `.env` file loading               |
+* Invalid inputs
+* Missing fields
+
+### ⚠️ Edge Cases
+
+* Boundary values
+* Empty states
+
+### 🔐 Security
+
+* SQL injection
+* XSS scenarios
+
+---
+
+## 🔄 CI Pipeline
+
+Runs on every push:
+
+* Python setup
+* Dependency install
+* Playwright setup
+* `flake8` linting
+* Import validation
+
+---
+
+## 📦 Dependencies
+
+| Package        | Purpose            |
+| -------------- | ------------------ |
+| playwright     | Browser automation |
+| anthropic      | Claude API         |
+| requests       | HTTP calls         |
+| beautifulsoup4 | HTML parsing       |
+| pandas         | Excel export       |
+| openpyxl       | Excel writer       |
+| python-dotenv  | Env management     |
+
+---
+
+## ⚠️ Known Limitations
+
+* Single-page scraping (v1)
+* Depends on AI response format
+* Requires API credits
+
+---
+
+## 🚀 Roadmap
+
+* [ ] Multi-page crawling
+* [ ] Playwright test generation
+* [ ] Self-healing locators
+* [ ] Multi-AI fallback (Claude + OpenAI + Ollama)
+* [ ] CI test execution integration
+
+---
+
+## 💡 Use Cases
+
+* QA Engineers → auto-generate test cases
+* Test Automation → bootstrap frameworks
+* AI QA Research → intelligent test generation
+* Teams → improve coverage quickly
+
+---
+
+## 👨‍💻 Author
+
+**Kanak Verma**
+QA Automation Engineer | AI-Driven Testing Enthusiast
+
+---
+
+## ⭐ Support
+
+If you find this useful, give it a ⭐ on GitHub!
